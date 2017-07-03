@@ -18,6 +18,8 @@ class TableWindow : public QDialog
   private slots:
     void on_pushButton_sair_clicked();
 
+    void on_pushButton_export_clicked();
+
   private:
     Ui::TableWindow *ui;
 };
