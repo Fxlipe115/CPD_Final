@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>445</width>
-    <height>502</height>
+    <height>479</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,7 +28,17 @@
        </widget>
       </item>
       <item>
-       <widget class="QListView" name="listView_columns"/>
+       <widget class="QListView" name="listView_columns">
+        <property name="selectionMode">
+         <enum>QAbstractItemView::MultiSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="modelColumn">
+         <number>0</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -113,7 +123,6 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionAbrir">
    <property name="text">
     <string>Abrir</string>
