@@ -90,7 +90,7 @@ template <typename K, typename T>
 typename cpd::HashTable<K,T>::iterator cpd::HashTable<K,T>::search(const K key, const T item){
   typename Table::iterator bucket = table.begin() + (hash(key) % tableSize);
 
-  typename Bucket::iterator it = std::find((*bucket).begin(),(*bucket).end(),item);
+  typename Bucket::iterator it = std::find((*bucket).begin(),(*bucket).end(),make_pair(key,item));
 
   if(it != (*bucket).end()){
     return iterator(*this, bucket, it);
