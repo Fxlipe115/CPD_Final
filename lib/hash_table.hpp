@@ -4,18 +4,19 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <tuple>
 #include <stddef.h>
 
 namespace cpd{
 
-  template <typename T> class HashIter;
+  template <typename K, typename T> class HashIter;
 
   //===============HashTable===============
-  template <typename T>
+  template <typename K, typename T>
   class HashTable{
     private:
-      typedef std::vector<std::list<T>> Table;
-      typedef std::list<T> Bucket;
+      typedef std::vector<std::list<std::tuple<K,T>>> Table;
+      typedef std::list<std::tuple<K,T>> Bucket;
       const int initialSize = 17;
       Table table;
       int tableSize;
@@ -28,8 +29,8 @@ namespace cpd{
       unsigned long hash(int value);
     public:
       // iterator definitions
-      friend class HashIter<T>;
-      typedef HashIter<T> iterator;
+      friend class HashIter<K,T>;
+      typedef HashIter<K,T> iterator;
       typedef ptrdiff_t difference_type;
       typedef size_t size_type;
       typedef T value_type;
@@ -42,34 +43,34 @@ namespace cpd{
       int getSize();
       int getOccupancy();
       int getCollisions();
-      void insert(T item);
-      void remove(iterator item);
-      iterator search(T item);
+      void insert(const T item);
+      void remove(const iterator item);
+      iterator search(const T item);
   };
 
     //===============Iterator===============
-  template <typename T>
+  template <typename K, typename T>
   class HashIter{
     private:
-      HashTable<T>& hashTable;
-      typename HashTable<T>::Table::iterator curBucket;
-      typename HashTable<T>::Bucket::iterator curItem;
+      HashTable<K,T>& hashTable;
+      typename HashTable<K,T>::Table::iterator curBucket;
+      typename HashTable<K,T>::Bucket::iterator curItem;
     public:
-      HashIter(HashTable<T>& ht, bool isBegin);
-      HashIter(HashTable<T>& ht,
-        typename HashTable<T>::Table::iterator bucket,
-        typename HashTable<T>::Bucket::iterator item);
-      HashIter(const HashIter<T>& hi); // copy constructor
-      typename HashTable<T>::Table::iterator getCurBucket();
-      typename HashTable<T>::Bucket::iterator getCurItem();
-      bool operator==(const HashIter<T>& other);
-      bool operator!=(const HashIter<T>& other);
+      HashIter(HashTable<K,T>& ht, bool isBegin);
+      HashIter(HashTable<K,T>& ht,
+        typename HashTable<K,T>::Table::iterator bucket,
+        typename HashTable<K,T>::Bucket::iterator item);
+      HashIter(const HashIter<K,T>& hi); // copy constructor
+      typename HashTable<K,T>::Table::iterator getCurBucket();
+      typename HashTable<K,T>::Bucket::iterator getCurItem();
+      bool operator==(const HashIter<K,T>& other);
+      bool operator!=(const HashIter<K,T>& other);
       T& operator*();
-      HashIter<T>& operator++(); // prefix: ++iter
-      HashIter<T> operator++ (int); //postfix: iter++
+      HashIter<K,T>& operator++(); // prefix: ++iter
+      HashIter<K,T> operator++ (int); //postfix: iter++
   };
 }
 
-#include "hash_table.inl"
+#include "../ini/hash_table.inl"
 
 #endif
