@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <list>
-#include <tuple>
+#include <utility>
 #include <stddef.h>
 
 namespace cpd{
@@ -15,8 +15,8 @@ namespace cpd{
   template <typename K, typename T>
   class HashTable{
     private:
-      typedef std::vector<std::list<std::tuple<K,T>>> Table;
-      typedef std::list<std::tuple<K,T>> Bucket;
+      typedef std::vector<std::list<std::pair<K,T>>> Table;
+      typedef std::list<std::pair<K,T>> Bucket;
       const int initialSize = 17;
       Table table;
       int tableSize;
@@ -43,9 +43,9 @@ namespace cpd{
       int getSize();
       int getOccupancy();
       int getCollisions();
-      void insert(const T item);
+      void insert(const K key, const T item);
       void remove(const iterator item);
-      iterator search(const T item);
+      iterator search(const K key, const T item);
   };
 
     //===============Iterator===============

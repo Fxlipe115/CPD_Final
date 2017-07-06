@@ -19,8 +19,8 @@ void cpd::HashTable<K,T>::resize(){
   occupancy = 1;
 
   for(Bucket& bucket : aux){
-    for(T& i : bucket)
-      insert(i);
+    for(auto& tup : bucket)
+      insert(tup.first, tup.second);
   }
 }
 
@@ -71,12 +71,13 @@ int cpd::HashTable<K,T>::getCollisions(){
 }
 
 template <typename K, typename T>
-void cpd::HashTable<K,T>::insert(K key, T item){
+void cpd::HashTable<K,T>::insert(const K key, const T item){
   occupancy++;
   if(occupancy > (3 * (int)(tableSize / 4))){
     resize();
   }
-  table[hash(key) % tableSize].push_back(item);
+  //std::pair<K,T> tup = {key, item};
+  table[hash(key) % tableSize].push_back(make_pair(key,item));
 }
 
 template <typename K, typename T>
@@ -86,7 +87,7 @@ void cpd::HashTable<K,T>::remove(iterator item){
 }
 
 template <typename K, typename T>
-typename cpd::HashTable<K,T>::iterator cpd::HashTable<K,T>::search(K key, T item){
+typename cpd::HashTable<K,T>::iterator cpd::HashTable<K,T>::search(const K key, const T item){
   typename Table::iterator bucket = table.begin() + (hash(key) % tableSize);
 
   typename Bucket::iterator it = std::find((*bucket).begin(),(*bucket).end(),item);
@@ -172,7 +173,7 @@ bool cpd::HashIter<K,T>::operator!=(const HashIter<K,T>& other){
 
 template <typename K, typename T>
 T& cpd::HashIter<K,T>::operator*(){
-  return *curItem;
+  return (*curItem).second;
 }
 
 template <typename K, typename T>
