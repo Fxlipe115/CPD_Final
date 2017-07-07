@@ -36,16 +36,17 @@ namespace cpd{
       typedef T value_type;
       typedef T* pointer;
       typedef T& reference;
-      iterator begin();
-      iterator end();
 
+      // member functions
       HashTable();
       int getSize();
       int getOccupancy();
       int getCollisions();
       void insert(const K key, const T item);
       void remove(const iterator item);
-      iterator search(const K key, const T item);
+      iterator search(const K key);
+      iterator begin();
+      iterator end();
   };
 
     //===============Iterator===============

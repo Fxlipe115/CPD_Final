@@ -19,8 +19,8 @@ void cpd::HashTable<K,T>::resize(){
   occupancy = 1;
 
   for(Bucket& bucket : aux){
-    for(auto& tup : bucket)
-      insert(tup.first, tup.second);
+    for(auto& pair : bucket)
+      insert(pair.first, pair.second);
   }
 }
 
@@ -76,7 +76,7 @@ void cpd::HashTable<K,T>::insert(const K key, const T item){
   if(occupancy > (3 * (int)(tableSize / 4))){
     resize();
   }
-  //std::pair<K,T> tup = {key, item};
+
   table[hash(key) % tableSize].push_back(make_pair(key,item));
 }
 
@@ -87,10 +87,19 @@ void cpd::HashTable<K,T>::remove(iterator item){
 }
 
 template <typename K, typename T>
-typename cpd::HashTable<K,T>::iterator cpd::HashTable<K,T>::search(const K key, const T item){
+typename cpd::HashTable<K,T>::iterator cpd::HashTable<K,T>::search(const K key){
   typename Table::iterator bucket = table.begin() + (hash(key) % tableSize);
 
-  typename Bucket::iterator it = std::find((*bucket).begin(),(*bucket).end(),make_pair(key,item));
+  //typename Bucket::iterator it = std::find((*bucket).begin(),(*bucket).end(),make_pair(key,item));
+
+  typename Bucket::iterator it = (*bucket).begin();
+
+  while (it != (*bucket).end()){
+    if((*it).first == key){
+      break;
+    }
+    it++;
+  }
 
   if(it != (*bucket).end()){
     return iterator(*this, bucket, it);
