@@ -42,6 +42,6 @@ int Word::get_occurrences(){
     return this->occurrences;
 }
 
-std::list<int> reviews(){
+std::list<int> get_reviews(){
     return reviews
 }

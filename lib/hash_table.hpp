@@ -15,8 +15,8 @@ namespace cpd{
   template <typename K, typename T>
   class HashTable{
     private:
-      typedef std::vector<std::list<std::pair<K,T>>> Table;
-      typedef std::list<std::pair<K,T>> Bucket;
+      typedef std::vector<std::list<std::pair<K,T> > > Table;
+      typedef std::list<std::pair<K,T> > Bucket;
       const int initialSize = 17;
       Table table;
       int tableSize;
@@ -71,7 +71,5 @@ namespace cpd{
       HashIter<K,T> operator++ (int); //postfix: iter++
   };
 }
-
-#include "../ini/hash_table.inl"
 
 #endif

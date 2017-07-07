@@ -72,7 +72,7 @@ void initialize_reviews(cdp::HashTable<int,Review>& review_table,
 void initialize_words(cdp::HashTable<std::string,Word>& word_table,
                       cdp::HashTable<int,Review>& review_table){
   for(auto& review : review_table){
-    std::string inp = review.review();
+    std::string inp = review.get_review();
     remove_copy_if(inp.begin(), inp.end(), ispunct);
     istringstream iss(inp);
     string aux;
@@ -89,14 +89,14 @@ void initialize_words(cdp::HashTable<std::string,Word>& word_table,
       if (it != word_table.end()){ // word already on table
         // Update word
         (*it).inc_occurrence();
-        (*it).add_sum(review.classification());
-        (*it).reviews().push_back(review.id());
+        (*it).add_sum(review.get_classification());
+        (*it).reviews().push_back(review.get_id());
       }else{
         // Create and insert new word
         Word word(aux);
         word.inc_occurrence();
-        word.add_sum(review.classification());
-        word.reviews().push_back(review.id());
+        word.add_sum(review.get_classification());
+        word.reviews().push_back(review.get_id());
 
         word_table.insert(aux, word)
       }

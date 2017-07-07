@@ -2,6 +2,7 @@
 #define WORD_HPP
 
 #include<string>
+#include<list>
 
 class Word {
     private:
@@ -20,7 +21,7 @@ class Word {
         double get_sum();
         std::string get_key();
         int get_occurrences();
-        std::list<int> reviews();
+        std::list<int> get_reviews();
 };
 
 #endif

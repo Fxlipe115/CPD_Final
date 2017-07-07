@@ -1,7 +1,7 @@
 #ifndef FILE_FUNCTIONS_HPP
 #define FILE_FUNCTIONS_HPP
 
-#include "../lib/hash_table.hpp"
+#include "../src/hash_table_inst.cpp"
 #include "../lib/word.hpp"
 #include "../lib/review.hpp"
 

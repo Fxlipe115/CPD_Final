@@ -11,9 +11,9 @@ private:
 
 public:
   Review(int id, int classification, std::string review);
-  int id();
-  int classification();
-  std::string review();
+  int get_id();
+  int get_classification();
+  std::string get_review();
 };
 
 #endif

@@ -4,14 +4,14 @@ Review::Review(int id, int classification, std::string review)
  : id(id), classification(classification), review(review)
 {}
 
-int Review::id(){
+int Review::get_id(){
   return review;
 }
 
-int Review::classification(){
+int Review::get_classification(){
   return classification;
 }
 
-std::string Review::review(){
+std::string Review::get_review(){
   return review;
 }
