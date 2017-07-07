@@ -6,6 +6,8 @@
 #include <list>
 #include <utility>
 #include <stddef.h>
+#include "review.hpp"
+#include "word.hpp"
 
 namespace cpd{
 
@@ -71,5 +73,8 @@ namespace cpd{
       HashIter<K,T> operator++ (int); //postfix: iter++
   };
 }
+
+// template class cpd::HashTable<int,Review>;
+// template class cpd::HashTable<std::string,Word>;
 
 #endif

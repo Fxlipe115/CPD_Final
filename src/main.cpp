@@ -1,16 +1,27 @@
 #include <iostream>
-#include "../src/hash_table_inst.cpp"
-#include "../lib/review.hpp"
-#include "../lib/word.hpp"
-#include "../lib/file_functions.hpp"
+#include <algorithm>
+#include <sstream>
+#include <cctype>
+#include "hash_table.hpp"
+#include "review.hpp"
+#include "word.hpp"
+#include "file_functions.hpp"
 
-double score(std::string review, cpd::HashTable<std::string,Word> word_table);
+double score(std::string& review, cpd::HashTable<std::string,Word>& word_table);
 
 int main(int argc, char const *argv[]) {
   cpd::HashTable<int,Review> review_table;
   cpd::HashTable<std::string,Word> word_table;
 
   initialize_data(word_table, review_table, "./resources/movieReviews.txt");
+
+  // for(auto& word : word_table){
+  //   std::cout << "Key: " << word.get_key() << '\n';
+  //   std::cout << "Sum: " << word.get_sum() << '\n';
+  //   std::cout << "Occurrences: " << word.get_occurrences() << '\n';
+  //   std::cout << "Mean: " << word.mean() << '\n';
+  //   std::cout << '\n';
+  // }
 
   std::string review;
   std::cin >> review;
@@ -20,13 +31,13 @@ int main(int argc, char const *argv[]) {
   return 0;
 }
 
-double score(std::string review, cpd::HashTable<std::string,Word> word_table){
-  score = 0;
-  i = 0;
+double score(std::string& review, cpd::HashTable<std::string,Word>& word_table){
+  double score = 0;
+  int i = 0;
 
-  remove_copy_if(review.begin(), review.end(), ispunct);
-  istringstream iss(review);
-  string aux;
+  std::remove_copy_if(review.begin(), review.end(), review.begin(), ispunct);
+  std::istringstream iss(review);
+  std::string aux;
 
   // Iterates for each token
   while(iss){
@@ -35,7 +46,7 @@ double score(std::string review, cpd::HashTable<std::string,Word> word_table){
     // Lowercase the word.
     transform(aux.begin(), aux.end(), aux.begin(), tolower);
 
-    cpd::HashTable::iterator it = word_table.search(aux);
+    cpd::HashTable<std::string,Word>::iterator it = word_table.search(aux);
 
     if(it != word_table.end()){ // word found
       score += (*it).mean();
@@ -43,4 +54,7 @@ double score(std::string review, cpd::HashTable<std::string,Word> word_table){
       score += 2; // neutral
     }
     i++;
+  }
+
+  return score/i;
 }

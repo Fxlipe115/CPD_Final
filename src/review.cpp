@@ -1,11 +1,11 @@
-#include "../lib/review.hpp"
+#include "review.hpp"
 
 Review::Review(int id, int classification, std::string review)
  : id(id), classification(classification), review(review)
 {}
 
 int Review::get_id(){
-  return review;
+  return id;
 }
 
 int Review::get_classification(){

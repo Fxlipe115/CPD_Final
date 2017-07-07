@@ -1,5 +1,6 @@
 #include <cmath>
 #include <algorithm>
+#include "hash_table.hpp"
 
 //===============HashTable===============
 template <typename K, typename T>
@@ -77,7 +78,7 @@ void cpd::HashTable<K,T>::insert(const K key, const T item){
     resize();
   }
 
-  table[hash(key) % tableSize].push_back(make_pair(key,item));
+  table[hash(key) % tableSize].push_back(std::make_pair(key,item));
 }
 
 template <typename K, typename T>
@@ -235,3 +236,8 @@ cpd::HashIter<K,T> cpd::HashIter<K,T>::operator++(int){ //postfix: iter++
   }
   return clone;
 }
+
+template class cpd::HashTable<int,Review>;
+template class cpd::HashTable<std::string,Word>;
+template class cpd::HashIter<int,Review>;
+template class cpd::HashIter<std::string,Word>;

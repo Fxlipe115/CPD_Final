@@ -1,11 +1,19 @@
-SRC=./src/file_functions.cpp ./src/review.cpp ./src/word.cpp ./src/main.cpp ./src/hash_table_inst.cpp
-OBJ=./bin/main.o ./bin/file_functions.o ./bin/review.o ./bin/word.o ./bin/hash_table_inst.o
+CC=g++ -std=c++11 -c
+CFLAGS=-I./lib/
+
+BIN_FOLDER=./bin/
+SRC_FOLDER=./src/
+
+SRC=$(wildcard $(SRC_FOLDER)*.cpp)
+OBJ=$(addprefix $(BIN_FOLDER),$(notdir $(SRC:.cpp=.o)))
 EXE=./bin/main
 
 all: $(OBJ)
-	@mkdir -p bin
-	gcc -o $(EXE) $(OBJ)
+	g++ -o $(EXE) $(OBJ)
 
-$(OBJ): $(SRC)
-	@mkdir -p bin
-	gcc -c -o $@ $< --std=c++11
+./bin/%.o: ./src/%.cpp
+#	@mkdir -p $(BIN_FOLDER)
+	$(CC) -o $@ $< $(CFLAGS)
+
+clean:
+	rm -f $(BIN_FOLDER)*

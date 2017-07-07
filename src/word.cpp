@@ -1,4 +1,4 @@
-#include<./../lib/word.hpp>
+#include "word.hpp"
 
 using namespace std;
 
@@ -42,6 +42,6 @@ int Word::get_occurrences(){
     return this->occurrences;
 }
 
-std::list<int> get_reviews(){
-    return reviews
+std::list<int> Word::get_reviews(){
+    return reviews;
 }
