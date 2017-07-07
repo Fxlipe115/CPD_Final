@@ -7,7 +7,7 @@ Word::Word(string key)
 {}
 
 double Word::mean(){
-    return this->sum()/this->occurrences();
+    return this->sum/this->occurrences;
 }
 
 void Word::set_sum(double sum){
@@ -30,14 +30,14 @@ void Word::set_key(string key){
     this->key = key;
 }
 
-double Word::sum(){
+double Word::get_sum(){
     return this->sum;
 }
 
-string Word::key(){
+string Word::get_key(){
     return this->key;
 }
 
-int Word::occurrences(){
+int Word::get_occurrences(){
     return this->occurrences;
 }

@@ -1,3 +1,6 @@
+#ifndef WORD_HPP
+#define WORD_HPP
+
 #include<string>
 
 class Word {
@@ -9,7 +12,7 @@ class Word {
         Word(std::string key);
         double mean();
         void set_sum(double sum);
-        void inc_sum(double add);
+        void add_sum(double value);
         void set_occurrences(int occ);
         void inc_occurrence();
         void set_key(std::string key);
@@ -17,3 +20,5 @@ class Word {
         std::string get_key();
         int get_occurrences();
 };
+
+#endif
