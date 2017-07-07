@@ -8,6 +8,7 @@ class Word {
         double sum;
         std::string key;
         int occurrences;
+        std::list<int> reviews;
     public:
         Word(std::string key);
         double mean();
@@ -19,6 +20,7 @@ class Word {
         double get_sum();
         std::string get_key();
         int get_occurrences();
+        std::list<int> reviews();
 };
 
 #endif

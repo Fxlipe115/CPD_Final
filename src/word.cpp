@@ -3,7 +3,7 @@
 using namespace std;
 
 Word::Word(string key)
- : sum(0), key(key), occurrences(0)
+ : sum(0), key(key), occurrences(0), reviews()
 {}
 
 double Word::mean(){
@@ -40,4 +40,8 @@ string Word::get_key(){
 
 int Word::get_occurrences(){
     return this->occurrences;
+}
+
+std::list<int> reviews(){
+    return reviews
 }
