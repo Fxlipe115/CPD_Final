@@ -1,9 +1,9 @@
 #include "file_functions.hpp"
-#include<fstream>
-#include<algorithm>
+#include <fstream>
+#include <algorithm>
 #include <cctype>
-#include<sstream>
-#include<string>
+#include <sstream>
+#include <string>
 
 void initialize_reviews(cpd::HashTable<int,Review>& review_table,
                         const std::string file_path){
@@ -22,7 +22,7 @@ void initialize_reviews(cpd::HashTable<int,Review>& review_table,
       // Extracts review classification
       iss >> classification;
       // Get review string
-      review_str = iss.str();
+      review_str = iss.str().substr(2,std::string::npos);
 
       Review review(i, classification, review_str);
       review_table.insert(i, review);
