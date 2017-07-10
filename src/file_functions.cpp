@@ -4,6 +4,7 @@
 #include <cctype>
 #include <sstream>
 #include <string>
+#include <iostream>
 
 void initialize_reviews(cpd::HashTable<int,Review>& review_table,
                         const std::string file_path){
@@ -30,6 +31,9 @@ void initialize_reviews(cpd::HashTable<int,Review>& review_table,
       i++;
     }
     afile.close();
+  }else{
+    std::cerr << "Error: File \"" << file_path << "\" not found." << '\n';
+    exit(-1);
   }
 }
 
@@ -54,13 +58,17 @@ void initialize_words(cpd::HashTable<std::string,Word>& word_table,
         // Update word
         (*it).inc_occurrence();
         (*it).add_sum(review.get_classification());
-        (*it).get_reviews().push_back(review.get_id());
+        // checks if review is already on word's inverted index
+        // add review only if not already on the index
+        if(std::find((*it).get_reviews().begin(),(*it).get_reviews().end(),review.get_id()) == (*it).get_reviews().end()){
+          (*it).add_review(review.get_id());
+        }
       }else{
         // Create and insert new word
         Word word(aux);
         word.inc_occurrence();
         word.add_sum(review.get_classification());
-        word.get_reviews().push_back(review.get_id());
+        word.add_review(review.get_id());
 
         word_table.insert(aux, word);
       }

@@ -1,5 +1,5 @@
 CC=g++ -std=c++11 -c
-CFLAGS=-I./lib/
+CFLAGS=-I./lib/ -ggdb3
 
 BIN_FOLDER=./bin/
 SRC_FOLDER=./src/

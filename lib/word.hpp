@@ -21,7 +21,8 @@ class Word {
         double get_sum();
         std::string get_key();
         int get_occurrences();
-        std::list<int> get_reviews();
+        const std::list<int>& get_reviews();
+		    void add_review(int key);
 };
 
 #endif

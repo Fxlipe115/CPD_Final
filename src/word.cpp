@@ -42,6 +42,10 @@ int Word::get_occurrences(){
     return this->occurrences;
 }
 
-std::list<int> Word::get_reviews(){
+const std::list<int>& Word::get_reviews(){
     return reviews;
+}
+
+void Word::add_review(int key) {
+	this->reviews.push_back(key);
 }
