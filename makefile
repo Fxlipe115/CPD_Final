@@ -12,8 +12,8 @@ all: $(OBJ)
 	g++ -o $(EXE) $(OBJ)
 
 ./bin/%.o: ./src/%.cpp
-#	@mkdir -p $(BIN_FOLDER)
+	@mkdir -p $(BIN_FOLDER)
 	$(CC) -o $@ $< $(CFLAGS)
 
 clean:
-	rm -f $(BIN_FOLDER)*
+	rm -f $(BIN_FOLDER)*.o
