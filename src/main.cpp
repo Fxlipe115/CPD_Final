@@ -1,7 +1,9 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include <fstream>
 #include <cctype>
+#include <cmath>
 #include <list>
 #include "hash_table.hpp"
 #include "review.hpp"
@@ -65,25 +67,59 @@ void main_program(int argc, char const *argv[]){
     std::cout << "4 - Show rankings" << '\n';
     std::cout << "0 - Exit" << '\n';
 
-    std::cout << ">  ";
+    std::cout << ">> ";
     std::cin >> opt;
     // std::cin.clear();
     // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     switch (opt) {
       case 1:
+		std::cout << '\n';
+		std::cout << "====================================================" << '\n';
+		std::cout << '\n';
         show_score(word_table);
+		std::cout << '\n';
+		std::cout << "====================================================" << '\n';
+		std::cout << '\n';
         break;
       case 2:
-        //from_file();
+		std::cout << '\n';
+		std::cout << "====================================================" << '\n';
+		std::cout << '\n';
+        from_file(word_table);
+		std::cout << '\n';
+		std::cout << "====================================================" << '\n';
+		std::cout << '\n';
         break;
       case 3:
+		std::cout << '\n';
+		std::cout << "====================================================" << '\n';
+		std::cout << '\n';
         show_reviews(review_table, word_table);
+		std::cout << '\n';
+		std::cout << "====================================================" << '\n';
+		std::cout << '\n';
         break;
       case 4:
-        //show_rankings();
+		std::cout << '\n';
+		std::cout << "====================================================" << '\n';
+		std::cout << '\n';
+        show_rankings(word_table);
+		std::cout << '\n';
+		std::cout << "====================================================" << '\n';
+		std::cout << '\n';
+		break;
       case 0:
         break;
+	  default:
+		std::cout << '\n';
+		std::cout << "====================================================" << '\n';
+		std::cout << '\n';
+		std::cerr << "Error: Invalid option." << '\n';
+		std::cout << '\n';
+		std::cout << "====================================================" << '\n';
+		std::cout << '\n';
+		break;
     }
 
   } while(opt != 0);
@@ -105,20 +141,89 @@ void usage(int argc, char const *argv[]){
 
 void show_score(cpd::HashTable<std::string,Word>& word_table){
   std::string review;
+  std::string feels[] = {"Negative", "Somewhat negative", "Neutral", "Somewhat positive", "Positive"};
+  
+  std::cout << "Enter review: ";
+  std::cin.ignore();
   std::getline(std::cin, review);
-  std::cout << score(review, word_table) << std::endl;
+
+  double score_value = score(review, word_table);
+  std::cout << "Score: " << score_value << ". \"" << feels[(int)round(score_value)] << "\"." << std::endl;
 }
 
 void show_reviews(cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::string,Word>& word_table){
+  std::cout << "Enter word: ";
   std::string word;
   std::cin >> word;
+  
+  int opt = 0;
+
+  std::cout << "Filter reviews?" << '\n';
+  std::cout << "1 - Show only positive reviews" << '\n';
+  std::cout << "2 - Show only somewhat positive reviews" << '\n';
+  std::cout << "3 - Show only neutral" << '\n';
+  std::cout << "4 - Show only somewhat negative reviews" << '\n';
+  std::cout << "5 - Show only negative reviews" << '\n';
+  std::cout << "0 - Do not filter" << '\n';
+
+  bool filter = false;
+  int filter_key = 0;
+  
+  do {
+    std::cout << ">> ";
+    std::cin >> opt;
+
+    switch (opt) {
+      case 1:
+        filter = true;
+		filter_key = 4;
+        break;
+      case 2:
+        filter = true;
+		filter_key = 3;
+        break;
+      case 3:
+        filter = true;
+		filter_key = 2;
+        break;
+      case 4:
+        filter = true;
+		filter_key = 1;
+		break;
+	  case 5:
+        filter = true;
+		filter_key = 0;
+		break;
+      case 0:
+        break;
+	  default:
+		std::cerr << "Error: Invalid option." << '\n';
+		opt = -1;
+		break;
+    }
+
+  } while(opt == -1);
 
   std::list<Review> l;
   reviews_containing(word,l,review_table,word_table);
+  
+  std::cout << '\n';
+  
   int i = 1;
   for(auto& x : l){
-     std::cout << i << ": " << x.get_review() << std::endl;
-     i++;
+	  
+	std::string review = x.get_review();
+	double review_score = score(review,word_table);
+	
+    if(!filter || (filter && (round(review_score) == filter_key))){
+	  std::cout << i << ": " << review << std::endl;
+	  std::cout << "\tScore: " << review_score << std::endl;
+      i++;
+	}    
+  }
+  
+  if(i == 1){
+	  std::cout << "Query returned no results." << '\n';
   }
 }
 
@@ -127,21 +232,93 @@ void from_file(cpd::HashTable<std::string,Word>& word_table){
   std::cout << "Enter input file path:  ";
   std::cin >> file_path;
 
-  ifstream input_file(file_path,ios::in);
+  std::ifstream input_file(file_path);
   if(input_file.is_open()){
-    string review;
-    while(getline(myfile,buffer)){
-      std::cout << score(review, word_table) << std::endl;
+	  
+    std::string out_path = file_path;
+    out_path += ".out";
+    std::ofstream output_file(out_path);
+	
+    if(output_file.is_open()){
+        std::string review;
+		std::string feels[] = {"Negative", "Somewhat negative", "Neutral", "Somewhat positive", "Positive"};
+		
+		int i = 1;
+        while(getline(input_file,review)){
+		  
+		  output_file << i << ": " << review << std::endl;
+		  double score_value = score(review, word_table);
+          output_file << "   Score: " << score_value << ". \"" << feels[(int)round(score_value)] << "\"." << std::endl;
+		  
+		  i++;
+        }
+        input_file.close();
+		std::cout << "File \"" << out_path << "\" created successfully." << std::endl;
+    }
+    else{
+        std::cerr << "Error: Could not create \"" << file_path << "\"." << '\n';
     }
       input_file.close();
-    }
+  }
   else{
     std::cerr << "Error: File \"" << file_path << "\" not found." << '\n';
   }
 }
 
 void show_rankings(cpd::HashTable<std::string,Word>& word_table){
-  std::cout << "\tChoose an option" << std::endl;
+  int opt = 0;
+  bool exit = false;
+  
+  while(!exit){
+    std::cout << "Choose an option:" << std::endl;
+    std::cout << "1 - Top positive words" << std::endl;
+    std::cout << "2 - Top negative words" << std::endl;
+    std::cout << "3 - Most frequent words" << std::endl;
+    std::cout << "0 - Cancel" << std::endl;
+  
+    std::cout << ">> ";
+    std::cin >> opt;
+
+	bool (*comp)(Word*, Word*) = nullptr;
+	
+    switch (opt){
+      case 1:
+        comp = [](Word* a, Word* b){return a->mean() > b->mean();};
+        break;
+      case 2:
+        comp = [](Word* a, Word* b){return a->mean() < b->mean();};
+        break;
+      case 3:
+        comp = [](Word* a, Word* b){return a->get_occurrences() > b->get_occurrences();};
+        break;
+      case 0:
+		exit = true;
+        break;
+	  default:
+		std::cerr << "\tError: Invalid option." << '\n';
+		break;
+    }
+	
+	if(comp != nullptr){
+	  int k = 0;
+	  std::cout << "Number of words to show: ";
+	  std::cin >> k;
+	  
+	  std::list<Word*> l;
+	  for(auto& word : word_table){
+		l.push_back(&word);
+	  }
+	  cpd::merge_sort(l.begin(), l.end(), comp);
+	  
+	  int i = 0;
+	  for(std::list<Word*>::iterator it = l.begin(); (it != l.end()) && (i < k); it++){
+		std::cout << i+1 << ": \"" << (*it)->get_key() << "\" - Score: " << (*it)->mean() << ". - " << (*it)->get_occurrences() << " occurrence(s)." << '\n';
+	    i++;
+	  }
+	  
+	  exit = true;
+	}
+  }
 }
 
 double score(std::string& review, cpd::HashTable<std::string,Word>& word_table){
