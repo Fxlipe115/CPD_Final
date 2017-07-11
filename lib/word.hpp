@@ -9,6 +9,8 @@ class Word {
         double sum;
         std::string key;
         int occurrences;
+        int pos;
+        int neg;
         std::list<int> reviews;
     public:
         Word(std::string key);
@@ -22,7 +24,11 @@ class Word {
         std::string get_key();
         int get_occurrences();
         const std::list<int>& get_reviews();
-		    void add_review(int key);
+        void add_review(int key);
+        void set_pos(int pos);
+        int get_pos();
+        void set_neg(int neg);
+        int get_neg();
 };
 
 #endif
