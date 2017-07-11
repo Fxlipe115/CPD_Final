@@ -59,6 +59,8 @@ void initialize_words(cpd::HashTable<std::string,Word>& word_table,
         (*it).inc_occurrence();
         (*it).add_sum(review.get_classification());
         // checks if review is already on word's inverted index
+        if(review.get_classification() < 2) (*it).inc_neg();
+        else (*it).inc_pos();
         // add review only if not already on the index
         if(std::find((*it).get_reviews().begin(),(*it).get_reviews().end(),review.get_id()) == (*it).get_reviews().end()){
           (*it).add_review(review.get_id());
@@ -69,6 +71,8 @@ void initialize_words(cpd::HashTable<std::string,Word>& word_table,
         word.inc_occurrence();
         word.add_sum(review.get_classification());
         word.add_review(review.get_id());
+        if(review.get_classification() < 2) word.inc_neg();
+        else word.inc_pos();
 
         word_table.insert(aux, word);
       }

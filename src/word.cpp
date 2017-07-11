@@ -1,4 +1,5 @@
 #include "word.hpp"
+#include <cmath>
 
 using namespace std;
 
@@ -7,7 +8,17 @@ Word::Word(string key)
 {}
 
 double Word::mean(){
-    return this->sum/this->occurrences;
+    // Not really your average mean
+    double temp = (this->sum/this->occurrences) - 2;
+    if(temp < 2){
+        temp *= wil_lower_bound(this->get_neg(), this->get_occurrences());
+        temp += 2;
+    }
+    else{
+        temp *= wil_lower_bound(this->get_pos(), this->get_occurrences());
+        temp += 2;
+    }
+    return temp;
 }
 
 void Word::set_sum(double sum){
@@ -54,6 +65,10 @@ void Word::set_pos(int pos){
     this->pos = pos;
 }
 
+void Word::inc_pos(){
+    this->pos++;
+}
+
 int Word::get_pos(){
     return this->pos;
 }
@@ -62,6 +77,19 @@ void Word::set_neg(int neg){
     this->neg = neg;
 }
 
+void Word::inc_neg(){
+    this->neg++;
+}
+
 int Word::get_neg(){
     return this->neg;
+}
+
+double Word::wil_lower_bound(int pos, int total){
+    if(total == 0)
+        return 0;
+    else{
+        double z = 1.96, phat = 1.0*pos/total;
+        return (phat + z*z/(2*total) - z * sqrt((phat*(1-phat)+z*z/(4*total))/total))/(1+z*z/total);
+    }
 }

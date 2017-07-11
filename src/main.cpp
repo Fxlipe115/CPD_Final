@@ -341,7 +341,21 @@ double score(std::string& review, cpd::HashTable<std::string,Word>& word_table){
 
         if(it != word_table.end()){ // word found
             score += (*it).mean();
-        }else{ // word not on table
+            /*
+            double temp = (*it).mean() - 2;
+            // If the score is negative
+            if(temp < 0){
+                temp *= wil_lower_bound((*it).get_neg(), (*it).get_occurrences());
+                score += temp + 2;
+            }
+            // Else the score is positive
+            else{
+                temp *= wil_lower_bound((*it).get_pos(), (*it).get_occurrences());
+                score += temp + 2;
+            }
+            */
+        // word not on table
+        }else{
             score += 2; // neutral
         }
         i++;
@@ -364,14 +378,5 @@ void reviews_containing(const std::string& word, std::list<Review>& output, cpd:
             cpd::HashTable<int,Review>::iterator itr = review_table.search(i);
             output.push_back(*itr);
         }
-    }
-}
-
-double wil_lower_bound(int pos, int total){
-    if(total == 0)
-        return 0;
-    else{
-        double z = 1.96, phat = 1.0*pos/total;
-        return (phat + z*z/(2*total) - z * sqrt((phat*(1-phat)+z*z/(4*total))/total))/(1+z*z/total);
     }
 }
