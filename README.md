@@ -1,4 +1,4 @@
-# The Last of CPD
+# The Last of CPD :ok_hand: :joy: :ok_hand:
 Final work for the Classificação e Pesquisa de Dados course from Universidade Federal do Rio Grande do Sul.
 
 ## How to compile:
