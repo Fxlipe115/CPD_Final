@@ -24,13 +24,6 @@ void reviews_containing(const std::string& word, std::list<Review>& output, cpd:
 double wil_lower_bound(int pos, int total);
 
 int main(int argc, char const *argv[]) {
-
-    // std::list<int> l = {5,1,6,2,3,8,7,4};
-    // cpd::merge_sort(l.begin(), l.end(), [](int a, int b){return a > b;});
-    // for(auto& i : l){
-    //   std::cout << i << '\n';
-    // }
-
     if (argc == 2) {
         if (std::string(argv[1]) == "-h") {
             help(argc,argv);
@@ -54,83 +47,81 @@ int main(int argc, char const *argv[]) {
 
 void main_program(int argc, char const *argv[]){
 
-  cpd::HashTable<int,Review> review_table;
-  cpd::HashTable<std::string,Word> word_table;
+    cpd::HashTable<int,Review> review_table;
+    cpd::HashTable<std::string,Word> word_table;
 
-  std::cout << "Loading data..." << '\n';
-  clock_t begin = clock();
+    std::cout << "Loading data..." << '\n';
+    clock_t begin = clock();
 
-  initialize_data(word_table, review_table, argv[1]);
+    initialize_data(word_table, review_table, argv[1]);
 
-  clock_t end = clock();
-  std::cout << "Loading took " << double(end - begin) / CLOCKS_PER_SEC << " seconds." << '\n';
+    clock_t end = clock();
+    std::cout << "Loading took " << double(end - begin) / CLOCKS_PER_SEC << " seconds." << '\n';
 
-  int opt = 0;
+    int opt = 0;
 
-  do {
-    std::cout << "Choose an option:" << '\n';
-    std::cout << "1 - Write new review" << '\n';
-    std::cout << "2 - Evaluate reviews from file" << '\n';
-    std::cout << "3 - Search reviews containing some word" << '\n';
-    std::cout << "4 - Show rankings" << '\n';
-    std::cout << "0 - Exit" << '\n';
+    do {
+        std::cout << "Choose an option:" << '\n';
+        std::cout << "1 - Write new review" << '\n';
+        std::cout << "2 - Evaluate reviews from file" << '\n';
+        std::cout << "3 - Search reviews containing some word" << '\n';
+        std::cout << "4 - Show rankings" << '\n';
+        std::cout << "0 - Exit" << '\n';
 
-    std::cout << ">> ";
-    std::cin >> opt;
-    // std::cin.clear();
-    // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << ">> ";
+        std::cin >> opt;
 
-    switch (opt) {
-      case 1:
-        std::cout << '\n';
-        std::cout << "====================================================" << '\n';
-        std::cout << '\n';
-        show_score(word_table);
-        std::cout << '\n';
-        std::cout << "====================================================" << '\n';
-        std::cout << '\n';
-        break;
-      case 2:
-        std::cout << '\n';
-        std::cout << "====================================================" << '\n';
-        std::cout << '\n';
-        from_file(word_table);
-        std::cout << '\n';
-        std::cout << "====================================================" << '\n';
-        std::cout << '\n';
-        break;
-      case 3:
-        std::cout << '\n';
-        std::cout << "====================================================" << '\n';
-        std::cout << '\n';
-        show_reviews(review_table, word_table);
-        std::cout << '\n';
-        std::cout << "====================================================" << '\n';
-        std::cout << '\n';
-        break;
-      case 4:
-        std::cout << '\n';
-        std::cout << "====================================================" << '\n';
-        std::cout << '\n';
-        show_rankings(word_table);
-        std::cout << '\n';
-        std::cout << "====================================================" << '\n';
-        std::cout << '\n';
-        break;
-      case 0:
-        break;
-      default:
-        std::cout << '\n';
-        std::cout << "====================================================" << '\n';
-        std::cout << '\n';
-        std::cerr << "Error: Invalid option." << '\n';
-        std::cout << '\n';
-        std::cout << "====================================================" << '\n';
-        std::cout << '\n';
-        break;
-    }
+        switch (opt) {
+            case 1:
+                std::cout << '\n';
+                std::cout << "====================================================" << '\n';
+                std::cout << '\n';
+                show_score(word_table);
+                std::cout << '\n';
+                std::cout << "====================================================" << '\n';
+                std::cout << '\n';
+                break;
+            case 2:
+                std::cout << '\n';
+                std::cout << "====================================================" << '\n';
+                std::cout << '\n';
+                from_file(word_table);
+                std::cout << '\n';
+                std::cout << "====================================================" << '\n';
+                std::cout << '\n';
+                break;
+            case 3:
+                std::cout << '\n';
+                std::cout << "====================================================" << '\n';
+                std::cout << '\n';
+                show_reviews(review_table, word_table);
+                std::cout << '\n';
+                std::cout << "====================================================" << '\n';
+                std::cout << '\n';
+                break;
+            case 4:
+                std::cout << '\n';
+                std::cout << "====================================================" << '\n';
+                std::cout << '\n';
+                show_rankings(word_table);
+                std::cout << '\n';
+                std::cout << "====================================================" << '\n';
+                std::cout << '\n';
+                break;
+            case 0:
+                break;
+            default:
+                std::cout << '\n';
+                std::cout << "====================================================" << '\n';
+                std::cout << '\n';
+                std::cerr << "Error: Invalid option." << '\n';
+                std::cout << '\n';
+                std::cout << "====================================================" << '\n';
+                std::cout << '\n';
+                break;
+        }
 
-  } while(opt != 0);
+    } while(opt != 0);
 }
 
 void help(int argc, char const *argv[]){
@@ -330,101 +321,86 @@ void show_rankings(cpd::HashTable<std::string,Word>& word_table){
 }
 
 double score(std::string& review, cpd::HashTable<std::string,Word>& word_table){
-  double score = 0;
-  int i = 0;
-  std::string review_aux(review);
-  //std::remove_copy_if(review_aux.begin(), review_aux.end(), review_aux.begin(), ispunct);
-	//review_aux.erase (std::remove_if(review_aux.begin(), review_aux.end(), ispunct), review_aux.end());
-  // function that removes punctuation marks, digits, leading and trailing spaces and extra spaces from string 'str'
-  auto f = [](std::string str){
-    std::string s;
-    str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
-    str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
-    bool space = false;
-    for(auto& c : str){
-      if(isalpha(c)){
-        s += c;
-        space = false;
-      }else if(isspace(c) && !space){
-        space = true;
-        s+= ' ';
-      }
-    }
-    return s;
-  };
-
-  std::istringstream iss(f(review_aux));
-  std::string aux;
-
-  // Iterates for each token
-  while(iss){
-    // Pass the token to an auxiliary string.
-    iss >> aux;
-    // Lowercase the word.
-    transform(aux.begin(), aux.end(), aux.begin(), tolower);
-
-    cpd::HashTable<std::string,Word>::iterator it = word_table.search(aux);
-
-    if(it != word_table.end()){ // word found
-        score += (*it).mean();
-        /*
-        double temp = (*it).mean() - 2;
-        // If the score is negative
-        if(temp < 0){
-            temp *= wil_lower_bound((*it).get_neg(), (*it).get_occurrences());
-            score += temp + 2;
+    double score = 0;
+    int i = 0;
+    std::string review_aux(review);
+    //std::remove_copy_if(review_aux.begin(), review_aux.end(), review_aux.begin(), ispunct);
+    //review_aux.erase (std::remove_if(review_aux.begin(), review_aux.end(), ispunct), review_aux.end());
+    // function that removes punctuation marks, digits, leading and trailing spaces and extra spaces from string 'str'
+    auto f = [](std::string str){
+        std::string s;
+        str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
+        str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
+        bool space = false;
+        for(auto& c : str){
+            if(isalpha(c)){
+                s += c;
+                space = false;
+            }else if(isspace(c) && !space){
+                space = true;
+                s+= ' ';
+            }
         }
-        // Else the score is positive
-        else{
-            temp *= wil_lower_bound((*it).get_pos(), (*it).get_occurrences());
-            score += temp + 2;
-        }
-        */
-    // word not on table
-    }else{
-        score += 2; // neutral
-    }
-    i++;
-  }
+        return s;
+    };
 
-  return score/i;
+    std::istringstream iss(f(review_aux));
+    std::string aux;
+
+    // Iterates for each token
+    // Pass stream to string
+    while(iss >> aux){
+        // Lowercase the word.
+        transform(aux.begin(), aux.end(), aux.begin(), tolower);
+
+        cpd::HashTable<std::string,Word>::iterator it = word_table.search(aux);
+
+        if(it != word_table.end()){ // word found
+            score += (*it).mean();
+            // word not on table
+        }else{
+            score += 2; // neutral
+        }
+        i++;
+    }
+    return score/i;
 }
 
 void reviews_containing(const std::string& word, std::list<Review>& output, cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::string,Word>& word_table){
-  //std::remove_copy_if(key.begin(), key.end(), key.begin(), ispunct);
-	//key.erase (std::remove_if(key.begin(), key.end(), ispunct), key.end());
-  // function that removes punctuation marks, digits, leading and trailing spaces and extra spaces from string 'str'
-  auto f = [](std::string str){
-    std::string s;
-    str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
-    str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
-    bool space = false;
-    for(auto& c : str){
-      if(isalpha(c)){
-        s += c;
-        space = false;
-      }else if(isspace(c) && !space){
-        space = true;
-        s+= ' ';
-      }
+    //std::remove_copy_if(key.begin(), key.end(), key.begin(), ispunct);
+    //key.erase (std::remove_if(key.begin(), key.end(), ispunct), key.end());
+    // function that removes punctuation marks, digits, leading and trailing spaces and extra spaces from string 'str'
+    auto f = [](std::string str){
+        std::string s;
+        str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
+        str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
+        bool space = false;
+        for(auto& c : str){
+            if(isalpha(c)){
+                s += c;
+                space = false;
+            }else if(isspace(c) && !space){
+                space = true;
+                s+= ' ';
+            }
+        }
+        return s;
+    };
+
+    std::string key = f(word);
+
+    transform(key.begin(), key.end(), key.begin(), tolower);
+
+    output.clear();
+
+    cpd::HashTable<std::string,Word>::iterator itw = word_table.search(key);
+
+    if(itw != word_table.end()){
+        for(auto& i : (*itw).get_reviews()){
+            cpd::HashTable<int,Review>::iterator itr = review_table.search(i);
+            if(itr != review_table.end()){
+                output.push_back(*itr);
+            }
+        }
     }
-    return s;
-  };
-
-  std::string key = f(word);
-
-  transform(key.begin(), key.end(), key.begin(), tolower);
-
-  output.clear();
-
-  cpd::HashTable<std::string,Word>::iterator itw = word_table.search(key);
-
-  if(itw != word_table.end()){
-    for(auto& i : (*itw).get_reviews()){
-      cpd::HashTable<int,Review>::iterator itr = review_table.search(i);
-      if(itr != review_table.end()){
-        output.push_back(*itr);
-      }
-    }
-  }
 }

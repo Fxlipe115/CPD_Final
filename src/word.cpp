@@ -4,7 +4,7 @@
 using namespace std;
 
 Word::Word(string key)
- : sum(0), key(key), occurrences(0), pos(0), neg(0), reviews()
+    : sum(0), key(key), occurrences(0), pos(0), neg(0), reviews()
 {}
 
 double Word::mean(){
@@ -58,7 +58,7 @@ const std::list<int>& Word::get_reviews(){
 }
 
 void Word::add_review(int key) {
-	this->reviews.push_back(key);
+    this->reviews.push_back(key);
 }
 
 void Word::set_pos(int pos){
@@ -86,6 +86,7 @@ int Word::get_neg(){
 }
 
 double Word::wil_lower_bound(int pos, int total){
+    // Wilson lower bound of confidence
     if(total == 0)
         return 0;
     else{
