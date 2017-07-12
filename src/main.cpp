@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cctype>
 #include <cmath>
+#include <ctime>
 #include <list>
 #include "hash_table.hpp"
 #include "review.hpp"
@@ -53,77 +54,83 @@ int main(int argc, char const *argv[]) {
 
 void main_program(int argc, char const *argv[]){
 
-    cpd::HashTable<int,Review> review_table;
-    cpd::HashTable<std::string,Word> word_table;
+  cpd::HashTable<int,Review> review_table;
+  cpd::HashTable<std::string,Word> word_table;
 
-    initialize_data(word_table, review_table, argv[1]);
+  std::cout << "Loading data..." << '\n';
+  clock_t begin = clock();
 
-    int opt = 0;
+  initialize_data(word_table, review_table, argv[1]);
 
-    do {
-        std::cout << "Choose an option:" << '\n';
-        std::cout << "1 - Write new review" << '\n';
-        std::cout << "2 - Evaluate reviews from file" << '\n';
-        std::cout << "3 - Search reviews containing some word" << '\n';
-        std::cout << "4 - Show rankings" << '\n';
-        std::cout << "0 - Exit" << '\n';
+  clock_t end = clock();
+  std::cout << "Loading took " << double(end - begin) / CLOCKS_PER_SEC << " seconds." << '\n';
 
-        std::cout << ">> ";
-        std::cin >> opt;
-        // std::cin.clear();
-        // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  int opt = 0;
 
-        switch (opt) {
-            case 1:
-                std::cout << '\n';
-                std::cout << "====================================================" << '\n';
-                std::cout << '\n';
-                show_score(word_table);
-                std::cout << '\n';
-                std::cout << "====================================================" << '\n';
-                std::cout << '\n';
-                break;
-            case 2:
-                std::cout << '\n';
-                std::cout << "====================================================" << '\n';
-                std::cout << '\n';
-                from_file(word_table);
-                std::cout << '\n';
-                std::cout << "====================================================" << '\n';
-                std::cout << '\n';
-                break;
-            case 3:
-                std::cout << '\n';
-                std::cout << "====================================================" << '\n';
-                std::cout << '\n';
-                show_reviews(review_table, word_table);
-                std::cout << '\n';
-                std::cout << "====================================================" << '\n';
-                std::cout << '\n';
-                break;
-            case 4:
-                std::cout << '\n';
-                std::cout << "====================================================" << '\n';
-                std::cout << '\n';
-                show_rankings(word_table);
-                std::cout << '\n';
-                std::cout << "====================================================" << '\n';
-                std::cout << '\n';
-                break;
-            case 0:
-                break;
-            default:
-                std::cout << '\n';
-                std::cout << "====================================================" << '\n';
-                std::cout << '\n';
-                std::cerr << "Error: Invalid option." << '\n';
-                std::cout << '\n';
-                std::cout << "====================================================" << '\n';
-                std::cout << '\n';
-                break;
-        }
+  do {
+    std::cout << "Choose an option:" << '\n';
+    std::cout << "1 - Write new review" << '\n';
+    std::cout << "2 - Evaluate reviews from file" << '\n';
+    std::cout << "3 - Search reviews containing some word" << '\n';
+    std::cout << "4 - Show rankings" << '\n';
+    std::cout << "0 - Exit" << '\n';
 
-    } while(opt != 0);
+    std::cout << ">> ";
+    std::cin >> opt;
+    // std::cin.clear();
+    // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    switch (opt) {
+      case 1:
+        std::cout << '\n';
+        std::cout << "====================================================" << '\n';
+        std::cout << '\n';
+        show_score(word_table);
+        std::cout << '\n';
+        std::cout << "====================================================" << '\n';
+        std::cout << '\n';
+        break;
+      case 2:
+        std::cout << '\n';
+        std::cout << "====================================================" << '\n';
+        std::cout << '\n';
+        from_file(word_table);
+        std::cout << '\n';
+        std::cout << "====================================================" << '\n';
+        std::cout << '\n';
+        break;
+      case 3:
+        std::cout << '\n';
+        std::cout << "====================================================" << '\n';
+        std::cout << '\n';
+        show_reviews(review_table, word_table);
+        std::cout << '\n';
+        std::cout << "====================================================" << '\n';
+        std::cout << '\n';
+        break;
+      case 4:
+        std::cout << '\n';
+        std::cout << "====================================================" << '\n';
+        std::cout << '\n';
+        show_rankings(word_table);
+        std::cout << '\n';
+        std::cout << "====================================================" << '\n';
+        std::cout << '\n';
+        break;
+      case 0:
+        break;
+      default:
+        std::cout << '\n';
+        std::cout << "====================================================" << '\n';
+        std::cout << '\n';
+        std::cerr << "Error: Invalid option." << '\n';
+        std::cout << '\n';
+        std::cout << "====================================================" << '\n';
+        std::cout << '\n';
+        break;
+    }
+
+  } while(opt != 0);
 }
 
 void help(int argc, char const *argv[]){
