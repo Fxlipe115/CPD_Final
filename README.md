@@ -1,5 +1,5 @@
-# CPD_Final
-Trabalho final da cadeira de Classificação e Pesquisa de Dados
+# The Last of CPD
+Final work for the Classificação e Pesquisa de Dados course from Universidade Federal do Rio Grande do Sul.
 
 ## How to compile:
 ```
