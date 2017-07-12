@@ -323,60 +323,101 @@ void show_rankings(cpd::HashTable<std::string,Word>& word_table){
 }
 
 double score(std::string& review, cpd::HashTable<std::string,Word>& word_table){
-    double score = 0;
-    int i = 0;
-
-    std::remove_copy_if(review.begin(), review.end(), review.begin(), ispunct);
-    std::istringstream iss(review);
-    std::string aux;
-
-    // Iterates for each token
-    while(iss){
-        // Pass the token to an auxiliary string.
-        iss >> aux;
-        // Lowercase the word.
-        transform(aux.begin(), aux.end(), aux.begin(), tolower);
-
-        cpd::HashTable<std::string,Word>::iterator it = word_table.search(aux);
-
-        if(it != word_table.end()){ // word found
-            score += (*it).mean();
-            /*
-            double temp = (*it).mean() - 2;
-            // If the score is negative
-            if(temp < 0){
-                temp *= wil_lower_bound((*it).get_neg(), (*it).get_occurrences());
-                score += temp + 2;
-            }
-            // Else the score is positive
-            else{
-                temp *= wil_lower_bound((*it).get_pos(), (*it).get_occurrences());
-                score += temp + 2;
-            }
-            */
-        // word not on table
-        }else{
-            score += 2; // neutral
-        }
-        i++;
+  double score = 0;
+  int i = 0;
+  std::string review_aux(review);
+  //std::remove_copy_if(review_aux.begin(), review_aux.end(), review_aux.begin(), ispunct);
+	//review_aux.erase (std::remove_if(review_aux.begin(), review_aux.end(), ispunct), review_aux.end());
+  // function that removes punctuation marks, digits, leading and trailing spaces and extra spaces from string 'str'
+  auto f = [](std::string str){
+    std::string s;
+    str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
+    str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
+    bool space = false;
+    for(auto& c : str){
+      if(isalpha(c)){
+        s += c;
+        space = false;
+      }else if(isspace(c) && !space){
+        space = true;
+        s+= ' ';
+      }
     }
+    return s;
+  };
 
-    return score/i;
+  std::istringstream iss(f(review_aux));
+  std::string aux;
+
+  // Iterates for each token
+  while(iss){
+    // Pass the token to an auxiliary string.
+    iss >> aux;
+    // Lowercase the word.
+    transform(aux.begin(), aux.end(), aux.begin(), tolower);
+
+    cpd::HashTable<std::string,Word>::iterator it = word_table.search(aux);
+
+    if(it != word_table.end()){ // word found
+        score += (*it).mean();
+        /*
+        double temp = (*it).mean() - 2;
+        // If the score is negative
+        if(temp < 0){
+            temp *= wil_lower_bound((*it).get_neg(), (*it).get_occurrences());
+            score += temp + 2;
+        }
+        // Else the score is positive
+        else{
+            temp *= wil_lower_bound((*it).get_pos(), (*it).get_occurrences());
+            score += temp + 2;
+        }
+        */
+    // word not on table
+    }else{
+        score += 2; // neutral
+    }
+    i++;
+  }
+
+  return score/i;
 }
 
 void reviews_containing(const std::string& word, std::list<Review>& output, cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::string,Word>& word_table){
-    std::string key = word;
-    std::remove_copy_if(key.begin(), key.end(), key.begin(), ispunct);
-    transform(key.begin(), key.end(), key.begin(), tolower);
-
-    output.clear();
-
-    cpd::HashTable<std::string,Word>::iterator itw = word_table.search(key);
-
-    if(itw != word_table.end()){
-        for(auto& i : (*itw).get_reviews()){
-            cpd::HashTable<int,Review>::iterator itr = review_table.search(i);
-            output.push_back(*itr);
-        }
+  //std::remove_copy_if(key.begin(), key.end(), key.begin(), ispunct);
+	//key.erase (std::remove_if(key.begin(), key.end(), ispunct), key.end());
+  // function that removes punctuation marks, digits, leading and trailing spaces and extra spaces from string 'str'
+  auto f = [](std::string str){
+    std::string s;
+    str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
+    str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
+    bool space = false;
+    for(auto& c : str){
+      if(isalpha(c)){
+        s += c;
+        space = false;
+      }else if(isspace(c) && !space){
+        space = true;
+        s+= ' ';
+      }
     }
+    return s;
+  };
+
+  std::string key = f(word);
+
+  transform(key.begin(), key.end(), key.begin(), tolower);
+
+  output.clear();
+
+  cpd::HashTable<std::string,Word>::iterator itw = word_table.search(key);
+
+  if(itw != word_table.end()){
+    for(auto& i : (*itw).get_reviews()){
+      cpd::HashTable<int,Review>::iterator itr = review_table.search(i);
+      if(itr != review_table.end()){
+        output.push_back(*itr);
+      }
+    }
+  }
 }
