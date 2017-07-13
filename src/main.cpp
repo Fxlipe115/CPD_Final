@@ -24,6 +24,7 @@ void show_rankings(cpd::HashTable<std::string,Word>& word_table);
 double score(std::string& review, cpd::HashTable<std::string,Word>& word_table);
 void reviews_containing(const std::string& word, std::list<Review>& output, cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::string,Word>& word_table);
 double wil_lower_bound(int pos, int total);
+double round_to_multiple(double number, double multiple);
 
 int main(int argc, char const *argv[]) {
     if (argc == 2) {
@@ -149,7 +150,7 @@ void show_score(cpd::HashTable<std::string,Word>& word_table){
     std::getline(std::cin, review);
 
     double score_value = score(review, word_table);
-    std::cout << "Score: " << score_value << ". \"" << feels[(int)round(score_value)] << "\"." << std::endl;
+    std::cout << "Score: " << score_value << ". \"" << feels[(int)round_to_multiple(score_value,0.8)] << "\"." << std::endl;
 }
 
 void show_reviews(cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::string,Word>& word_table){
@@ -216,7 +217,7 @@ void show_reviews(cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::
         std::string review = x.get_review();
         double review_score = score(review,word_table);
 
-        if(!filter || (filter && (round(review_score) == filter_key))){
+        if(!filter || (filter && ((int)round_to_multiple(review_score,0.8) == filter_key))){
             std::cout << i << ": " << review << std::endl;
             std::cout << "\tScore: " << review_score << std::endl;
             i++;
@@ -249,7 +250,7 @@ void from_file(cpd::HashTable<std::string,Word>& word_table){
 
                 output_file << i << ": " << review << std::endl;
                 double score_value = score(review, word_table);
-                output_file << "   Score: " << score_value << ". \"" << feels[(int)round(score_value)] << "\"." << std::endl;
+                output_file << "   Score: " << score_value << ". \"" << feels[(int)round_to_multiple(score_value,0.8)] << "\"." << std::endl;
 
                 i++;
             }
@@ -327,26 +328,26 @@ double score(std::string& review, cpd::HashTable<std::string,Word>& word_table){
     int i = 0;
     std::string review_aux(review);
     //std::remove_copy_if(review_aux.begin(), review_aux.end(), review_aux.begin(), ispunct);
-    //review_aux.erase (std::remove_if(review_aux.begin(), review_aux.end(), ispunct), review_aux.end());
-    // function that removes punctuation marks, digits, leading and trailing spaces and extra spaces from string 'str'
-    auto f = [](std::string str){
-        std::string s;
-        str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
-        str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
-        bool space = false;
-        for(auto& c : str){
-            if(isalpha(c)){
-                s += c;
-                space = false;
-            }else if(isspace(c) && !space){
-                space = true;
-                s+= ' ';
-            }
-        }
-        return s;
-    };
+    review_aux.erase (std::remove_if(review_aux.begin(), review_aux.end(), [](char c){return ispunct(c) || isdigit(c);}), review_aux.end());
+    // auto f = [](std::string str){
+    //     std::string s;
+    //     str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
+    //     str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
+    //     bool space = false;
+    //     for(auto& c : str){
+    //         if(isalpha(c)){
+    //             s += c;
+    //             space = false;
+    //         }else if(isspace(c) && !space){
+    //             space = true;
+    //             s+= ' ';
+    //         }
+    //     }
+    //     return s;
+    // };
 
-    std::istringstream iss(f(review_aux));
+    // std::istringstream iss(f(review_aux));
+    std::istringstream iss(review_aux);
     std::string aux;
 
     // Iterates for each token
@@ -370,26 +371,27 @@ double score(std::string& review, cpd::HashTable<std::string,Word>& word_table){
 
 void reviews_containing(const std::string& word, std::list<Review>& output, cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::string,Word>& word_table){
     //std::remove_copy_if(key.begin(), key.end(), key.begin(), ispunct);
-    //key.erase (std::remove_if(key.begin(), key.end(), ispunct), key.end());
+    std::string key = word;
+    key.erase (std::remove_if(key.begin(), key.end(), [](char c){return ispunct(c) || isdigit(c);}), key.end());
     // function that removes punctuation marks, digits, leading and trailing spaces and extra spaces from string 'str'
-    auto f = [](std::string str){
-        std::string s;
-        str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
-        str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
-        bool space = false;
-        for(auto& c : str){
-            if(isalpha(c)){
-                s += c;
-                space = false;
-            }else if(isspace(c) && !space){
-                space = true;
-                s+= ' ';
-            }
-        }
-        return s;
-    };
+    // auto f = [](std::string str){
+    //     std::string s;
+    //     str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
+    //     str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
+    //     bool space = false;
+    //     for(auto& c : str){
+    //         if(isalpha(c)){
+    //             s += c;
+    //             space = false;
+    //         }else if(isspace(c) && !space){
+    //             space = true;
+    //             s+= ' ';
+    //         }
+    //     }
+    //     return s;
+    // };
 
-    std::string key = f(word);
+    // std::string key = f(word);
 
     transform(key.begin(), key.end(), key.begin(), tolower);
 
@@ -405,4 +407,10 @@ void reviews_containing(const std::string& word, std::list<Review>& output, cpd:
             }
         }
     }
+}
+
+double round_to_multiple(double number, double multiple){
+  // TODO
+  // fix
+  return round(number + multiple -1);
 }
