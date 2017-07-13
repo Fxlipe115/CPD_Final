@@ -1,5 +1,6 @@
 #include <cmath>
 #include <algorithm>
+#include <functional>
 #include "hash_table.hpp"
 
 //===============HashTable===============
@@ -31,23 +32,26 @@ void cpd::HashTable<K,T>::shrinkToFit(){
 }
 
 template <typename K, typename T>
-unsigned long cpd::HashTable<K,T>::hash(std::string value){
-  unsigned long hashValue = (int)(value[0]);
+unsigned long cpd::HashTable<K,T>::hash(K value){
+  /*unsigned long hashValue = (int)(value[0]);
   int len = value.size();
   int i = 0;
-
   for(auto& c : value){
     hashValue += (int)pow((int)c,i) % (int)(pow(2,len)+1);
     i++;
   }
-
   return hashValue;
+  */
+  std::hash<K> hs;
+  
+  return hs(value);
 }
 
-template <typename K, typename T>
+/*template <typename K, typename T>
 unsigned long cpd::HashTable<K,T>::hash(int value){
   return hash(std::to_string(value));
 }
+*/
 
 template <typename K, typename T>
 int cpd::HashTable<K,T>::getSize(){
