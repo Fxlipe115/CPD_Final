@@ -1,3 +1,5 @@
+// Main function and others specific to be used with >this< main function aka no reason to put it in
+// another file.
 #include <iostream>
 #include <algorithm>
 #include <sstream>

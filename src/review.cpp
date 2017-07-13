@@ -1,3 +1,4 @@
+// Declaration of the Review class methods.
 #include "review.hpp"
 
 Review::Review(int id, int classification, std::string review)

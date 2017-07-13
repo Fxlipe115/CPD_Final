@@ -1,3 +1,5 @@
+// Hash table class implementation, some methods are not complete, but who cares? it will not be
+// used anyway.
 #include <cmath>
 #include <algorithm>
 #include <functional>
