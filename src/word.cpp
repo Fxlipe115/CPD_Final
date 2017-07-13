@@ -5,12 +5,12 @@
 using namespace std;
 
 Word::Word(string key)
-    : sum(0), key(key), occurrences(0), pos(0), neg(0), reviews()
+    : sum(0.0), key(key), occurrences(0), pos(0), neg(0), reviews()
 {}
 
 double Word::mean(){
     // Not really your average mean
-    double temp = (this->sum/this->occurrences) - 2;
+    double temp = (this->get_sum()/this->get_occurrences()) - 2;
     // Half of the interval is 0 now.
     if(temp < 0){
         temp *= wil_lower_bound(this->get_neg(), this->get_occurrences());
