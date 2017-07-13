@@ -211,6 +211,8 @@ void show_reviews(cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::
 
     std::cout << '\n';
 
+
+    std::string feels[] = {"Negative", "Somewhat negative", "Neutral", "Somewhat positive", "Positive"};
     int i = 1;
     for(auto& x : l){
 
@@ -219,7 +221,7 @@ void show_reviews(cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::
 
         if(!filter || (filter && ((int)round_to_multiple(review_score,0.8000001) == filter_key))){
             std::cout << i << ": " << review << std::endl;
-            std::cout << "\tScore: " << review_score << std::endl;
+            std::cout << "Score: " << review_score << ". \"" << feels[(int)round_to_multiple(review_score,0.8)] << "\"." << std::endl;
             i++;
         }
     }
