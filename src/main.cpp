@@ -217,7 +217,7 @@ void show_reviews(cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::
         std::string review = x.get_review();
         double review_score = score(review,word_table);
 
-        if(!filter || (filter && ((int)round_to_multiple(review_score,0.8) == filter_key))){
+        if(!filter || (filter && ((int)round_to_multiple(review_score,0.8000001) == filter_key))){
             std::cout << i << ": " << review << std::endl;
             std::cout << "\tScore: " << review_score << std::endl;
             i++;
@@ -412,5 +412,5 @@ void reviews_containing(const std::string& word, std::list<Review>& output, cpd:
 double round_to_multiple(double number, double multiple){
   // TODO
   // fix
-  return round(number + multiple -1);
+  return floor(number/multiple);
 }
