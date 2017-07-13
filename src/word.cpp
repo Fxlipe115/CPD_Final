@@ -1,5 +1,6 @@
-#include "word.hpp"
+// Getters, setters and other methods for the Word class.
 #include <cmath>
+#include "word.hpp"
 
 using namespace std;
 
@@ -10,7 +11,8 @@ Word::Word(string key)
 double Word::mean(){
     // Not really your average mean
     double temp = (this->sum/this->occurrences) - 2;
-    if(temp < 2){
+    // Half of the interval is 0 now.
+    if(temp < 0){
         temp *= wil_lower_bound(this->get_neg(), this->get_occurrences());
         temp += 2;
     }
