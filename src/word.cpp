@@ -1,6 +1,7 @@
 // Getters, setters and other methods for the Word class.
-#include <cmath>
 #include "word.hpp"
+
+#include <cmath>
 
 using namespace std;
 

@@ -1,18 +1,21 @@
 // Hash table class implementation, some methods are not complete, but who cares? it will not be
 // used anyway.
-#include <cmath>
-#include <algorithm>
-#include <functional>
 #include "hash_table.hpp"
+
+#include <algorithm>
+#include <cmath>
+#include <functional>
+
+namespace cpd{
 
 //===============HashTable===============
 template <typename K, typename T>
-cpd::HashTable<K,T>::HashTable()
+HashTable<K,T>::HashTable()
    : table(initialSize,Bucket()), tableSize(initialSize), occupancy(0)
 {}
 
 template <typename K, typename T>
-void cpd::HashTable<K,T>::resize(){
+void HashTable<K,T>::resize(){
   tableSize = tableSize * 2 + 1;
 
   Table aux(table); // copy of current table
@@ -29,12 +32,12 @@ void cpd::HashTable<K,T>::resize(){
 }
 
 template <typename K, typename T>
-void cpd::HashTable<K,T>::shrinkToFit(){
+void HashTable<K,T>::shrinkToFit(){
   //TODO
 }
 
 template <typename K, typename T>
-unsigned long cpd::HashTable<K,T>::hash(K value){
+unsigned long HashTable<K,T>::hash(K value){
   /*unsigned long hashValue = (int)(value[0]);
   int len = value.size();
   int i = 0;
@@ -45,28 +48,28 @@ unsigned long cpd::HashTable<K,T>::hash(K value){
   return hashValue;
   */
   std::hash<K> hs;
-  
+
   return hs(value);
 }
 
 /*template <typename K, typename T>
-unsigned long cpd::HashTable<K,T>::hash(int value){
+unsigned long HashTable<K,T>::hash(int value){
   return hash(std::to_string(value));
 }
 */
 
 template <typename K, typename T>
-int cpd::HashTable<K,T>::getSize(){
+int HashTable<K,T>::getSize(){
   return tableSize;
 }
 
 template <typename K, typename T>
-int cpd::HashTable<K,T>::getOccupancy(){
+int HashTable<K,T>::getOccupancy(){
   return occupancy;
 }
 
 template <typename K, typename T>
-int cpd::HashTable<K,T>::getCollisions(){
+int HashTable<K,T>::getCollisions(){
   int collisions = 0;
   for(auto& bucket : table){
     if(bucket.size() > 1){
@@ -78,7 +81,7 @@ int cpd::HashTable<K,T>::getCollisions(){
 }
 
 template <typename K, typename T>
-void cpd::HashTable<K,T>::insert(const K key, const T item){
+void HashTable<K,T>::insert(const K key, const T item){
   occupancy++;
   if(occupancy > (3 * (int)(tableSize / 4))){
     resize();
@@ -88,13 +91,13 @@ void cpd::HashTable<K,T>::insert(const K key, const T item){
 }
 
 template <typename K, typename T>
-void cpd::HashTable<K,T>::remove(iterator item){
+void HashTable<K,T>::remove(iterator item){
   (*item.getCurBucket()).erase(item.getCurItem());
   occupancy--;
 }
 
 template <typename K, typename T>
-typename cpd::HashTable<K,T>::iterator cpd::HashTable<K,T>::search(const K key){
+typename HashTable<K,T>::iterator HashTable<K,T>::search(const K key){
   typename Table::iterator bucket = table.begin() + (hash(key) % tableSize);
 
   //typename Bucket::iterator it = std::find((*bucket).begin(),(*bucket).end(),make_pair(key,item));
@@ -116,18 +119,18 @@ typename cpd::HashTable<K,T>::iterator cpd::HashTable<K,T>::search(const K key){
 }
 
 template <typename K, typename T>
-typename cpd::HashTable<K,T>::iterator cpd::HashTable<K,T>::begin(){
+typename HashTable<K,T>::iterator HashTable<K,T>::begin(){
   return iterator(*this, true);
 }
 
 template <typename K, typename T>
-typename cpd::HashTable<K,T>::iterator cpd::HashTable<K,T>::end(){
+typename HashTable<K,T>::iterator HashTable<K,T>::end(){
   return iterator(*this, false);
 }
 
 //===============Iterator===============
 template <typename K, typename T>
-cpd::HashIter<K,T>::HashIter(HashTable<K,T>& ht, bool isBegin)
+HashIter<K,T>::HashIter(HashTable<K,T>& ht, bool isBegin)
  : hashTable(ht){
   if(isBegin){ // begin iterator
     curBucket = hashTable.table.begin();
@@ -152,30 +155,30 @@ cpd::HashIter<K,T>::HashIter(HashTable<K,T>& ht, bool isBegin)
 }
 
 template <typename K, typename T>
-cpd::HashIter<K,T>::HashIter(HashTable<K,T>& ht,
+HashIter<K,T>::HashIter(HashTable<K,T>& ht,
   typename HashTable<K,T>::Table::iterator bucket,
   typename HashTable<K,T>::Bucket::iterator item)
  : hashTable(ht), curBucket(bucket), curItem(item)
 {}
 
 template <typename K, typename T>
-cpd::HashIter<K,T>::HashIter(const HashIter<K,T>& hi) // copy constructor
+HashIter<K,T>::HashIter(const HashIter<K,T>& hi) // copy constructor
  : hashTable(hi.hashTable),
    curBucket(hi.curBucket), curItem(hi.curItem)
 {}
 
 template <typename K, typename T>
-typename cpd::HashTable<K,T>::Table::iterator cpd::HashIter<K,T>::getCurBucket(){
+typename HashTable<K,T>::Table::iterator HashIter<K,T>::getCurBucket(){
   return curBucket;
 }
 
 template <typename K, typename T>
-typename cpd::HashTable<K,T>::Bucket::iterator cpd::HashIter<K,T>::getCurItem(){
+typename HashTable<K,T>::Bucket::iterator HashIter<K,T>::getCurItem(){
   return curItem;
 }
 
 template <typename K, typename T>
-bool cpd::HashIter<K,T>::operator==(const HashIter<K,T>& other){
+bool HashIter<K,T>::operator==(const HashIter<K,T>& other){
   // bool sameHashTable = this->hashTable == other.hashTable;
   bool sameBucket = this->curBucket == other.curBucket;
   bool sameItem = this->curItem == other.curItem;
@@ -183,17 +186,17 @@ bool cpd::HashIter<K,T>::operator==(const HashIter<K,T>& other){
 }
 
 template <typename K, typename T>
-bool cpd::HashIter<K,T>::operator!=(const HashIter<K,T>& other){
+bool HashIter<K,T>::operator!=(const HashIter<K,T>& other){
   return !(*this == other);
 }
 
 template <typename K, typename T>
-T& cpd::HashIter<K,T>::operator*(){
+T& HashIter<K,T>::operator*(){
   return (*curItem).second;
 }
 
 template <typename K, typename T>
-cpd::HashIter<K,T>& cpd::HashIter<K,T>::operator++(){ // prefix: ++iter
+HashIter<K,T>& HashIter<K,T>::operator++(){ // prefix: ++iter
   ++curItem;
   if(curItem == (*curBucket).end()){
     ++curBucket;
@@ -218,7 +221,7 @@ cpd::HashIter<K,T>& cpd::HashIter<K,T>::operator++(){ // prefix: ++iter
 }
 
 template <typename K, typename T>
-cpd::HashIter<K,T> cpd::HashIter<K,T>::operator++(int){ //postfix: iter++
+HashIter<K,T> HashIter<K,T>::operator++(int){ //postfix: iter++
   HashIter<K,T> clone(*this);
   ++curItem;
   if(curItem == (*curBucket).end()){
@@ -243,7 +246,9 @@ cpd::HashIter<K,T> cpd::HashIter<K,T>::operator++(int){ //postfix: iter++
   return clone;
 }
 
-template class cpd::HashTable<int,Review>;
-template class cpd::HashTable<std::string,Word>;
-template class cpd::HashIter<int,Review>;
-template class cpd::HashIter<std::string,Word>;
+template class HashTable<int,Review>;
+template class HashTable<std::string,Word>;
+template class HashIter<int,Review>;
+template class HashIter<std::string,Word>;
+
+}  // namespace cpd

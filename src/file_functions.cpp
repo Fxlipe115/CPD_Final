@@ -2,13 +2,15 @@
  * Here the file functions are defined. The functions do things such as reading the files and
  * inserting in the hash table.
  */
+
+#include "file_functions.hpp"
+
 #include <fstream>
 #include <algorithm>
 #include <cctype>
 #include <sstream>
 #include <string>
 #include <iostream>
-#include "file_functions.hpp"
 
 // Reads from the file and inserts the review with the classification on the reviews table.
 void initialize_reviews(cpd::HashTable<int, Review>& review_table, const std::string file_path){
