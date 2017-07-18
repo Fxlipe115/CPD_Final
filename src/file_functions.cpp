@@ -49,25 +49,7 @@ void initialize_words(cpd::HashTable<std::string, Word>& word_table,
         std::string inp(review.get_review());
         //remove_copy_if(inp.begin(), inp.end(), inp.begin(), ispunct);
         inp.erase (std::remove_if(inp.begin(), inp.end(), [](char c){return ispunct(c) || isdigit(c);}), inp.end());
-        // function that removes punctuation marks, digits, leading and trailing spaces and extra spaces from string 'str'
-        // auto f = [](std::string str){
-        //     std::string s;
-        //     str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
-        //     str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
-        //     bool space = false;
-        //     for(auto& c : str){
-        //         if(isalpha(c)){
-        //             s += c;
-        //             space = false;
-        //         }else if(isspace(c) && !space){
-        //             space = true;
-        //             s+= ' ';
-        //         }
-        //     }
-        //     return s;
-        // };
 
-        // std::istringstream iss(f(inp));
         std::istringstream iss(inp);
         std::string aux;
 
