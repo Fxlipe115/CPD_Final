@@ -8,10 +8,13 @@
 #include <cmath>
 #include <ctime>
 #include <list>
+
 #include "hash_table.hpp"
 #include "review.hpp"
 #include "word.hpp"
-#include "file_functions.hpp"
+#include "trainer.hpp"
+#include "moodle_trainer.hpp"
+#include "tsv_trainer.hpp"
 #include "merge_sort.hpp"
 
 void main_program(int argc, char const *argv[]);
@@ -30,14 +33,14 @@ int main(int argc, char const *argv[]) {
     if (argc == 2) {
         if (std::string(argv[1]) == "-h") {
             help(argc,argv);
-        } else if(argv[1][0] == '-') {
-            usage(argc,argv);
         } else {
-            main_program(argc,argv);
+            usage(argc,argv);
         }
     } else if (argc == 3) {
         if (std::string(argv[1]) == "-h" || std::string(argv[2]) == "-h") {
             help(argc,argv);
+        } else if (std::string(argv[1]) == "-c" || std::string(argv[1]) == "-m"){
+            main_program(argc,argv);
         } else {
             usage(argc,argv);
         }
@@ -56,7 +59,11 @@ void main_program(int argc, char const *argv[]){
     std::cout << "Loading data..." << '\n';
     clock_t begin = clock();
 
-    initialize_data(word_table, review_table, argv[1]);
+    if(argv[1][1] == 'c'){
+      cpd::TsvTrainer::initialize_data(word_table, review_table, argv[2]);
+    }else if(argv[1][1] == 'm'){
+      cpd::MoodleTrainer::initialize_data(word_table, review_table, argv[2]);
+    }
 
     clock_t end = clock();
     std::cout << "Loading took " << double(end - begin) / CLOCKS_PER_SEC << " seconds." << '\n';
@@ -130,7 +137,9 @@ void main_program(int argc, char const *argv[]){
 void help(int argc, char const *argv[]){
     usage(argc,argv);
     std::cout << "Arguments:" << '\n';
-    std::cout << "\tpath\tPath to reviews file." << '\n';
+    std::cout << "\t-c\tOpen training file formated in CSV.";
+    std::cout << "\t-c\tOpen training file formated as defined on Moodle.";
+    std::cout << "\tpath\tPath to training file." << '\n';
     std::cout << '\n';
     std::cout << "Options:" << '\n';
     std::cout << "\t-h\tShow this message." << '\n';
@@ -138,7 +147,7 @@ void help(int argc, char const *argv[]){
 }
 
 void usage(int argc, char const *argv[]){
-    std::cout << "Usage: " << argv[0] << " file [-h]" << '\n';
+    std::cout << "Usage: " << argv[0] << " [-h] (-c|-m) file" << '\n';
 }
 
 void show_score(cpd::HashTable<std::string,Word>& word_table){
