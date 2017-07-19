@@ -150,7 +150,7 @@ void show_score(cpd::HashTable<std::string,Word>& word_table){
     std::getline(std::cin, review);
 
     double score_value = score(review, word_table);
-    std::cout << "Score: " << score_value << ". \"" << feels[(int)round_to_multiple(score_value,0.8)] << "\"." << std::endl;
+    std::cout << "Score: " << score_value << ". \"" << feels[(int)round_to_multiple(score_value,0.8000001)] << "\"." << std::endl;
 }
 
 void show_reviews(cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::string,Word>& word_table){
@@ -221,7 +221,7 @@ void show_reviews(cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::
 
         if(!filter || (filter && ((int)round_to_multiple(review_score,0.8000001) == filter_key))){
             std::cout << i << ": " << review << std::endl;
-            std::cout << "Score: " << review_score << ". \"" << feels[(int)round_to_multiple(review_score,0.8)] << "\"." << std::endl;
+            std::cout << "Score: " << review_score << ". \"" << feels[(int)round_to_multiple(review_score,0.8000001)] << "\"." << std::endl;
             i++;
         }
     }
@@ -232,41 +232,52 @@ void show_reviews(cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::
 }
 
 void from_file(cpd::HashTable<std::string,Word>& word_table){
-    std::string file_path;
-    std::cout << "Enter input file path:  ";
-    std::cin >> file_path;
+  std::string file_path;
+  std::cout << "Enter input file path:  ";
+  std::cin >> file_path;
 
-    std::ifstream input_file(file_path);
-    if(input_file.is_open()){
+  std::ifstream input_file(file_path);
+  if(input_file.is_open()){
 
-        std::string out_path = file_path;
-        out_path += ".out";
-        std::ofstream output_file(out_path);
+    std::string out_path = file_path;
+    out_path += ".out.csv";
+    std::ofstream output_file(out_path);
 
-        if(output_file.is_open()){
-            std::string review;
-            std::string feels[] = {"Negative", "Somewhat negative", "Neutral", "Somewhat positive", "Positive"};
+    if(output_file.is_open()){
+      output_file << "PhraseId,Sentiment" << '\n';
 
-            int i = 1;
-            while(getline(input_file,review)){
+      std::string review;
+      getline(input_file,review);  // ignore first line
 
-                output_file << i << ": " << review << std::endl;
-                double score_value = score(review, word_table);
-                output_file << "   Score: " << score_value << ". \"" << feels[(int)round_to_multiple(score_value,0.8)] << "\"." << std::endl;
+      int i = 1;
+      while(getline(input_file,review)){
 
-                i++;
-            }
-            input_file.close();
-            std::cout << "File \"" << out_path << "\" created successfully." << std::endl;
-        }
-        else{
-            std::cerr << "Error: Could not create \"" << file_path << "\"." << '\n';
-        }
-        input_file.close();
+        size_t n = review.find('\t');
+        std::string phraseId(review.begin(),review.begin()+n);
+        output_file << phraseId << ',';
+        review.erase(0,n+1);
+
+        n = review.find('\t');
+        //std::string sentenceId(review.begin(),review.begin()+n);
+        //output_file << sentenceId << '\n';
+        review.erase(0,n+1);
+
+        double score_value = score(review, word_table);
+        output_file << (int)round_to_multiple(score_value,0.8000001) << '\n';
+
+        i++;
+      }
+      input_file.close();
+      std::cout << "File \"" << out_path << "\" created successfully." << std::endl;
     }
     else{
-        std::cerr << "Error: File \"" << file_path << "\" not found." << '\n';
+      std::cerr << "Error: Could not create \"" << file_path << "\"." << '\n';
     }
+    input_file.close();
+  }
+  else{
+    std::cerr << "Error: File \"" << file_path << "\" not found." << '\n';
+  }
 }
 
 void show_rankings(cpd::HashTable<std::string,Word>& word_table){
@@ -329,46 +340,35 @@ double score(std::string& review, cpd::HashTable<std::string,Word>& word_table){
     double score = 0;
     int i = 0;
     std::string review_aux(review);
-    //std::remove_copy_if(review_aux.begin(), review_aux.end(), review_aux.begin(), ispunct);
-    review_aux.erase (std::remove_if(review_aux.begin(), review_aux.end(), [](char c){return ispunct(c) || isdigit(c);}), review_aux.end());
-    // auto f = [](std::string str){
-    //     std::string s;
-    //     str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
-    //     str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
-    //     bool space = false;
-    //     for(auto& c : str){
-    //         if(isalpha(c)){
-    //             s += c;
-    //             space = false;
-    //         }else if(isspace(c) && !space){
-    //             space = true;
-    //             s+= ' ';
-    //         }
-    //     }
-    //     return s;
-    // };
 
-    // std::istringstream iss(f(review_aux));
+    review_aux.erase (std::remove_if(review_aux.begin(), review_aux.end(), [](char c){return ispunct(c) || isdigit(c);}), review_aux.end());
+
     std::istringstream iss(review_aux);
     std::string aux;
 
     // Iterates for each token
     // Pass stream to string
+  if(review_aux.size() > 0 && !std::all_of(review_aux.begin(),review_aux.end(),isspace)){
     while(iss >> aux){
-        // Lowercase the word.
-        transform(aux.begin(), aux.end(), aux.begin(), tolower);
+      // Lowercase the word.
+      transform(aux.begin(), aux.end(), aux.begin(), tolower);
 
-        cpd::HashTable<std::string,Word>::iterator it = word_table.search(aux);
+      cpd::HashTable<std::string,Word>::iterator it = word_table.search(aux);
 
-        if(it != word_table.end()){ // word found
-            score += (*it).mean();
-            // word not on table
-        }else{
-            score += 2; // neutral
-        }
-        i++;
+      if(it != word_table.end()){ // word found
+        score += (*it).mean();
+        // word not on table
+      }else{
+        score += 2; // neutral
+      }
+      i++;
     }
-    return score/i;
+  }else{
+    score = 2;
+    i = 1;
+  }
+
+  return score/i;
 }
 
 void reviews_containing(const std::string& word, std::list<Review>& output, cpd::HashTable<int,Review>& review_table, cpd::HashTable<std::string,Word>& word_table){
