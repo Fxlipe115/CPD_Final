@@ -30,9 +30,9 @@ class HashTable{
   void resize();
   void shrinkToFit();
   // hash functions for supported types
-  unsigned long hash(K value);
-  //unsigned long hash(std::string value);
-  //unsigned long hash(int value);
+  //unsigned long hash(K value);
+  unsigned long hash(std::string value);
+  unsigned long hash(int value);
  public:
   // iterator definitions
   friend class HashIter<K,T>;

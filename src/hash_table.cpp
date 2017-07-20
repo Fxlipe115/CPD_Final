@@ -36,9 +36,17 @@ void HashTable<K,T>::shrinkToFit(){
   //TODO
 }
 
+/*
 template <typename K, typename T>
 unsigned long HashTable<K,T>::hash(K value){
-  /*unsigned long hashValue = (int)(value[0]);
+  std::hash<K> hs;
+  return hs(value);
+}
+*/
+
+template <typename K, typename T>
+unsigned long HashTable<K,T>::hash(std::string value){
+  unsigned long hashValue = (int)(value[0]);
   int len = value.size();
   int i = 0;
   for(auto& c : value){
@@ -46,17 +54,13 @@ unsigned long HashTable<K,T>::hash(K value){
     i++;
   }
   return hashValue;
-  */
-  std::hash<K> hs;
-
-  return hs(value);
 }
 
-/*template <typename K, typename T>
+template <typename K, typename T>
 unsigned long HashTable<K,T>::hash(int value){
   return hash(std::to_string(value));
 }
-*/
+
 
 template <typename K, typename T>
 int HashTable<K,T>::getSize(){

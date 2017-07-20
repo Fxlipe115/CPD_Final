@@ -7,10 +7,10 @@
 
 namespace cpd{
 
-template <class RandomAccessIterator>
-void merge_sort(RandomAccessIterator first, RandomAccessIterator last){
+template <class BidirectionalIterator>
+void merge_sort(BidirectionalIterator first, BidirectionalIterator last){
   if(std::distance(first, last) > 1){
-    RandomAccessIterator middle = first;
+    BidirectionalIterator middle = first;
     std::advance(middle, std::distance(first, last) / 2);
     merge_sort(first, middle);
     merge_sort(middle, last);
@@ -18,10 +18,10 @@ void merge_sort(RandomAccessIterator first, RandomAccessIterator last){
   }
 }
 
-template <class RandomAccessIterator, class Compare>
-void merge_sort(RandomAccessIterator first, RandomAccessIterator last, Compare comp){
+template <class BidirectionalIterator, class Compare>
+void merge_sort(BidirectionalIterator first, BidirectionalIterator last, Compare comp){
   if(std::distance(first, last) > 1){
-    RandomAccessIterator middle = first;
+    BidirectionalIterator middle = first;
     std::advance(middle, std::distance(first, last) / 2);
     merge_sort(first, middle, comp);
     merge_sort(middle, last, comp);
