@@ -3,7 +3,7 @@
  * inserting in the hash table.
  */
 
-#include "moodle_trainer.hpp"
+#include <moodle_trainer.hpp>
 
 #include <fstream>
 #include <algorithm>

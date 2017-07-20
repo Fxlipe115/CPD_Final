@@ -10,12 +10,12 @@
 
 \sloppy
 
-\title{Trabalho final de Classificação e Pesquisa de Dados}
+\title{Trabalho final de ClassificaÃ§Ã£o e Pesquisa de Dados}
 
 \author{Arthur Zachow\inst{1} e Felipe de Almeida Graeff\inst{1}}
 
 
-\address{Instituto de Informática -- Universidade Federal do Rio Grande do Sul
+\address{Instituto de Informï¿½tica -- Universidade Federal do Rio Grande do Sul
   (UFRGS)\\
   Caixa Postal 15.064 -- 91.501-970 -- Porto Alegre -- RS -- Brazil
   \email{\{azcoelho, fagraeff\}@inf.ufrgs.br}
@@ -25,52 +25,55 @@
 
 \maketitle
 
-\section{Introdução}
-O software desenvolvido para o trabalho final da cadeira de Classificação e Pesquisa de Dados é um
-analizador de sentimentos de comentários sobre filmes. O fato de ter sido desenvolvido com o
-objetivo de ser utilizado para a avaliação de comentários de filmes não impede de forma alguma a
-utilização para a classificação de outras coisas, como por exemplo: Tweets e comentários do
+\section{Introduï¿½ï¿½o}
+O software desenvolvido para o trabalho final da cadeira de Classificaï¿½ï¿½o e Pesquisa de Dados ï¿½ um
+analizador de sentimentos de comentï¿½rios sobre filmes. O fato de ter sido desenvolvido com o
+objetivo de ser utilizado para a avaliaï¿½ï¿½o de comentï¿½rios de filmes nï¿½o impede de forma alguma a
+utilizaï¿½ï¿½o para a classificaï¿½ï¿½o de outras coisas, como por exemplo: Tweets e comentï¿½rios do
 Facebook, desde que seja fornecida corretamente a entrada da forma especificada mais adiante no
 texto.
 
-O funcionamento do programa e a classificação dos comentários depende grandemente do arquivo de
-entrada fornecido, pois ele é usado como base para os cálculos de pontuação.
+O funcionamento do programa e a classificaÃ§Ã£o dos comentÃ¡rios depende grandemente do arquivo de
+entrada fornecido, pois ele Ã© usado como base para os cÃ¡lculos de pontuaÃ§Ã£o.
 
-O sistema de pontuação é o intervalo de 0--4 nos inteiros. Com 0 representando um sentimento "Muito
+O sistema de pontuaÃ§Ã£o Ã© o intervalo de 0--4 nos inteiros. Com 0 representando um sentimento "Muito
 negativo"; 1 sendo um sentimento "Negativo"; 2 representa um sentimento "Neutro"; 3 codifica um
-sentimento "Positivo"; 4 é classificado como um sentimento "Muito positivo".
+sentimento "Positivo"; 4 Ã© classificado como um sentimento "Muito positivo".
 
 \section{Desenvolvimento}
-O software foi desenvolvido na linguagem C++, padrão C++11, com o auxílio de poucas estruturas de
-dados nativas, apenas as classes "vector" e "list" foram utilizadas além dos tipos de dados básicos
-(string, int, double, etc...), pois esta era uma das limitações impostas na descrição do
+O software foi desenvolvido na linguagem C++, padrÃ£o C++11, com o auxÃ­lio de poucas estruturas de
+dados nativas, apenas as classes "vector" e "list" foram utilizadas alï¿½m dos tipos de dados bï¿½sicos
+(string, int, double, etc...), pois esta era uma das limitaÃ§Ãµes impostas na descriÃ§Ã£o do
 trabalho.
 
-As funções foram desenvolvidas e alocadas em arquivos separados da forma que os desenvolvedores
+As funÃ§Ãµes foram desenvolvidas e alocadas em arquivos separados da forma que os desenvolvedores
 julgaram conveniente no momento. Em 5 arquivos temos na pasta "src" temos: "file\_functions.cpp", o
-qual é a biblioteca a qual possui a implementação das funções diretamente relacionadas com a leitura
-do arquivo de entrada; "hash\_table.cpp" onde está a implementação da classe Hash Table (auto
-explicativo); "main.cpp" onde está a função main do programa e a implementação dos menus e coisas
-feitas diretamente para a interatividade do usuário; "review.cpp" é a implementação da classe Review
-que representa um comentário; "word.cpp" é a implementação da classe Word, a qual representa uma
-palavra a qual aparece ao menos em um comentário. A leitura do código pode ser feita
-"https://github.com/Fxlipe115/CPD\_Final" é encorajada pois ele não será apontado diretamente na
-descrição da maior parte do que foi implementado.
+qual Ã© a biblioteca a qual possui a implementaÃ§Ã£o das funÃ§Ãµes diretamente relacionadas com a leitura
+do arquivo de entrada; "hash\_table.cpp" onde estÃ¡ a implementaÃ§Ã£o da classe Hash Table (auto
+explicativo); "main.cpp" onde estÃ¡ a funÃ§Ã£o main do programa e a implementaÃ§Ã£o dos menus e coisas
+feitas diretamente para a interatividade do usuÃ¡rio; "review.cpp" Ã© a implementaÃ§Ã£o da classe Review
+que representa um comentÃ¡rio; "word.cpp" Ã© a implementaÃ§Ã£o da classe Word, a qual representa uma
+palavra a qual aparece ao menos em um comentÃ¡rio. A leitura do cÃ³digo pode ser feita
+"https://github.com/Fxlipe115/CPD\_Final" Ã© encorajada pois ele nÃ£o serÃ¡ apontado diretamente na
+descriÃ§Ã£o da maior parte do que foi implementado.
 
-A classe Word possui os seguintes atributos: sum que é a soma dos valores da palavra em todos os
-reviews; key que é a string que é a palavra em si; occurrences que é a quantidade de ocorrências da
-palavra; pos é a quantidade de vezes na qual a pontuação da palavra foi >= 2; neg é a quantidade de
-vezes que a pontuação foi < 2; reviews é uma lista de inteiros que são ponteiros para entradas na
-hash\_table dos reviews onde essa palavra está presente. Os métodos fora getters, setters e
-incrementadores de 1 nos atributos são apenas 2 métodos que são: wil\_lower\_bound, qual é o valor
-inferior do intervalo de confiança de Wilson; mean é o método que segue o algoritmo a seguir para o
-cálculo da pontuação da palavra.
+A classe Word possui os seguintes atributos: sum que ï¿½ a soma dos valores da palavra em todos os
+reviews; key que Ã© a string que Ã© a palavra em si; occurrences que Ã© a quantidade de ocorrÃªncias da
+palavra; pos Ã© a quantidade de vezes na qual a pontuaÃ§Ã£o da palavra foi >= 2; neg Ã© a quantidade de
+vezes que a pontuaÃ§Ã£o foi < 2; reviews Ã© uma lista de inteiros que sÃ£o ponteiros para entradas na
+hash\_table dos reviews onde essa palavra estÃ¡ presente. Os mÃ©todos fora getters, setters e
+incrementadores de 1 nos atributos sÃ£o apenas 2 mÃ©todos que sÃ£o: wil\_lower\_bound, qual Ã© o valor
+inferior do intervalo de confianÃ§a de Wilson; mean Ã© o mÃ©todo que segue o algoritmo a seguir para o
+cÃ¡lculo da pontuaÃ§Ã£o da palavra.
 
-O algoritmo de cálculo da pontuação da palavra é: primeiramente é lido o arquivo de entrada por
-completo e então utilizando os atributos da classe Word é cálculado a média simples, após isso esse
-valor calculado é feita a diferença para o valor neutro (2), então o resultado dessa operação é
-utilizado para multiplicar pelo valor do intervalo de confiança de Wilson e finalmente a esse último
-valor é somado 2 para retornar ao intervalo desejado [0--4].
+O algoritmo de cÃ¡lculo da pontuaÃ§Ã£o da palavra Ã©: primeiramente Ã© lido o arquivo de entrada por
+completo e entÃ£o utilizando os atributos da classe Word Ã© calculado a mÃ©dia simples, apÃ³s isso esse
+valor calculado Ã© feita a diferenÃ§a para o valor neutro (2), entÃ£o o resultado dessa operaÃ§Ã£o Ã©
+utilizado para multiplicar pelo valor do intervalo de confianÃ§a de Wilson e finalmente a esse Ãºltimo
+valor Ã© somado 2 para retornar ao intervalo desejado [0--4].
+
+$$ \frac{1}{1+\frac{1}{n}z^2}\left [ \hat{p} + \frac{1}{2n}z^2 \pm z \sqrt{\frac{1}{n} \hat{p}
+   \left ( 1 - \hat{p} \right ) + \frac{1}{4n^2} z^2} \right ] $$
 
 \section{Conclusion}
 

@@ -3,7 +3,6 @@
 
 #include "hash_table.hpp"
 #include "review.hpp"
-#include "trainer.hpp"
 #include "word.hpp"
 
 namespace cpd{
