@@ -137,7 +137,7 @@ void help(int argc, char const *argv[]){
     usage(argc,argv);
     std::cout << "Arguments:" << '\n';
     std::cout << "\t-c\tOpen training file formated in CSV." << '\n';
-    std::cout << "\t-c\tOpen training file formated as defined on Moodle." << '\n';
+    std::cout << "\t-m\tOpen training file formated as defined on Moodle." << '\n';
     std::cout << "\tpath\tPath to training file." << '\n';
     std::cout << '\n';
     std::cout << "Options:" << '\n';
